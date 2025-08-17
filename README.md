@@ -1,1 +1,1 @@
-# The Daily Climb - THE Career Advancement AI Agent,
+# Daily Climb - THE Career Advancement AI.
