@@ -78,7 +78,8 @@ src/
 ## Key Components
 
 ### Navigation
-- **LeftSidebar**: Collapsible sidebar navigation for desktop
+- **TopBar**: A fixed top bar for search, notifications, and user preferences.
+- **LeftSidebar**: Collapsible sidebar for primary navigation links on desktop
 - **MobileNavigation**: Bottom tab navigation for mobile
 
 ### Modals
