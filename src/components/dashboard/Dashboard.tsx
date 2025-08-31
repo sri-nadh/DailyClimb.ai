@@ -20,7 +20,7 @@ const DashboardContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(3),
   paddingBottom: theme.spacing(10), // Space for mobile navigation
   [theme.breakpoints.up('md')]: {
-    paddingTop: theme.spacing(10), // Space for desktop navigation
+    paddingTop: theme.spacing(3), // No top space needed for sidebar
     paddingBottom: theme.spacing(3),
   },
 }));

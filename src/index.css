@@ -62,3 +62,21 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Sidebar layout adjustments */
+.sidebar-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar-layout {
+    flex-direction: column;
+  }
+}

@@ -78,7 +78,7 @@ export const mockQuery = {
       readingTime: 12,
       listeningTime: 15,
       status: ContentStatus.PENDING as const,
-      priority: "high",
+      priority: "high" as const,
       sources: [
         {
           title: "AI Agents Transform Software Development",
@@ -101,7 +101,7 @@ export const mockQuery = {
       readingTime: 18,
       listeningTime: 22,
       status: ContentStatus.PENDING as const,
-      priority: "medium",
+      priority: "medium" as const,
       sources: [
         {
           title: "React Server Components Explained",
@@ -124,7 +124,7 @@ export const mockQuery = {
       readingTime: 15,
       listeningTime: 18,
       status: ContentStatus.PENDING as const,
-      priority: "high",
+      priority: "high" as const,
       sources: [
         {
           title: "Path to Staff Engineer",
