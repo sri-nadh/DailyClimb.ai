@@ -4,8 +4,6 @@ import {
   Toolbar,
   IconButton,
   Badge,
-  TextField,
-  InputAdornment,
   Avatar,
   Menu,
   MenuItem,
@@ -14,10 +12,10 @@ import {
   Typography,
   Stack,
   Tooltip,
+  Box,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined';
 import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 
@@ -38,27 +36,6 @@ const StyledAppBar = styled(AppBar, {
   width: `calc(100% - ${$isSidebarCollapsed ? '72px' : '280px'})`,
 }));
 
-const SearchField = styled(TextField)(({ theme }) => ({
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
-    borderRadius: theme.shape.borderRadius,
-    '& fieldset': {
-      border: '1px solid rgba(51, 65, 85, 0.5)',
-    },
-    '&:hover fieldset': {
-      border: '1px solid rgba(59, 130, 246, 0.5)',
-    },
-    '&.Mui-focused fieldset': {
-      border: '1px solid rgba(59, 130, 246, 1)',
-    },
-    transition: 'width 0.3s',
-    width: '200px',
-    '&.Mui-focused': {
-      width: '300px',
-    },
-  },
-}));
-
 interface TopBarProps {
   onNotificationClick: () => void;
   notificationCount: number;
@@ -67,7 +44,6 @@ interface TopBarProps {
   userAvatar: string;
   userName: string;
   onLogout: () => void;
-  onNavigate: (route: string) => void;
   isSidebarCollapsed: boolean;
 }
 
@@ -79,11 +55,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   userAvatar,
   userName,
   onLogout,
-  onNavigate,
   isSidebarCollapsed,
 }) => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget);
@@ -93,48 +67,26 @@ export const TopBar: React.FC<TopBarProps> = ({
     setUserMenuAnchor(null);
   };
 
-  const handleSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (searchQuery.trim()) {
-      onNavigate(`/history?search=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
   return (
     <StyledAppBar position="fixed" $isSidebarCollapsed={isSidebarCollapsed}>
-      <Toolbar sx={{ justifyContent: 'flex-end' }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          {/* Search */}
-          <form onSubmit={handleSearch}>
-            <SearchField
+      <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
+        <Box sx={{ minWidth: 200 }} /> {/* Spacer */}
+
+        {/* Preferences Toggle */}
+        <Tooltip title={isAudioMode ? 'Switch to Reading Mode' : 'Switch to Audio Mode'}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <AutoStoriesOutlinedIcon />
+            <Switch
+              checked={isAudioMode}
+              onChange={onAudioModeToggle}
+              color="primary"
               size="small"
-              placeholder="Search content..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PageviewOutlinedIcon className="text-gray-400" />
-                  </InputAdornment>
-                ),
-              }}
             />
-          </form>
+            <HeadphonesOutlinedIcon />
+          </Stack>
+        </Tooltip>
 
-          {/* Preferences Toggle */}
-          <Tooltip title={isAudioMode ? 'Switch to Reading Mode' : 'Switch to Audio Mode'}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <AutoStoriesOutlinedIcon />
-              <Switch
-                checked={isAudioMode}
-                onChange={onAudioModeToggle}
-                color="primary"
-                size="small"
-              />
-              <HeadphonesOutlinedIcon />
-            </Stack>
-          </Tooltip>
-
+        <Stack direction="row" alignItems="center" spacing={3} sx={{ minWidth: 200, justifyContent: 'flex-end' }}>
           {/* Notifications */}
           <IconButton color="inherit" onClick={onNotificationClick}>
             <Badge badgeContent={notificationCount} color="primary">
@@ -165,7 +117,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             sx={{ '& .MuiPaper-root': { backgroundColor: 'slate.800' } }}
           >
-            <MenuItem onClick={() => { onNavigate('/profile'); handleUserMenuClose(); }}>
+            <MenuItem onClick={() => { handleUserMenuClose(); }}>
               Profile Settings
             </MenuItem>
             <Divider />

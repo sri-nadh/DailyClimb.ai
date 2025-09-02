@@ -253,7 +253,6 @@ const App: React.FC = () => {
               userAvatar={user.profilePicture}
               userName={user.name}
               onLogout={handleLogout}
-              onNavigate={handleNavigate}
               isSidebarCollapsed={isSidebarCollapsed}
             />
           )}
