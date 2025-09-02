@@ -13,11 +13,13 @@ import {
   Card,
   CardContent,
   Avatar,
-  Divider,
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  List,
+  ListItemText,
+  ListItemButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -88,6 +90,7 @@ const CharacterCounter = styled(Typography)(({ theme, color }: { theme: any; col
 interface SocialMediaGeneratorProps {
   open: boolean;
   content: ContentItem | null;
+  availableContent: ContentItem[];
   onClose: () => void;
   onPost: (platform: SocialPlatform, postContent: string, scheduledFor?: string) => void;
   onSaveDraft: (platform: SocialPlatform, postContent: string) => void;
@@ -96,30 +99,40 @@ interface SocialMediaGeneratorProps {
 export const SocialMediaGenerator: React.FC<SocialMediaGeneratorProps> = ({
   open,
   content,
+  availableContent,
   onClose,
   onPost,
   onSaveDraft,
 }) => {
+  const [internalSelectedContent, setInternalSelectedContent] = useState<ContentItem | null>(null);
   const [selectedPlatform, setSelectedPlatform] = useState<SocialPlatform>(SocialPlatform.LINKEDIN);
   const [postContent, setPostContent] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [scheduledTime, setScheduledTime] = useState('');
 
   React.useEffect(() => {
-    if (content && open) {
-      generateInitialPost();
+    if (open) {
+      setInternalSelectedContent(content);
     }
-  }, [content, open, selectedPlatform]);
+  }, [content, open]);
+
+  React.useEffect(() => {
+    if (internalSelectedContent) {
+      generateInitialPost();
+    } else {
+      setPostContent('');
+    }
+  }, [internalSelectedContent, selectedPlatform]);
 
   const generateInitialPost = async () => {
-    if (!content) return;
+    if (!internalSelectedContent) return;
     
     setIsGenerating(true);
     
     // Simulate AI generation delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    const linkedInPost = `Just learned about ${content.title.toLowerCase()}. Key insights:
+    const linkedInPost = `Just learned about ${internalSelectedContent.title.toLowerCase()}. Key insights:
 
 🔹 AI agents are transforming enterprise software development workflows
 🔹 70% faster code review processes with automated assistance
@@ -127,11 +140,11 @@ export const SocialMediaGenerator: React.FC<SocialMediaGeneratorProps> = ({
 
 The future of software engineering is collaborative human-AI teams. What's your experience with AI coding tools?
 
-Source: ${content.sources[0]?.publication || 'Industry Research'}
+Source: ${internalSelectedContent.sources[0]?.publication || 'Industry Research'}
 
 #AI #SoftwareEngineering #TechTrends #ProfessionalDevelopment`;
 
-    const twitterPost = `Just learned about ${content.title.toLowerCase()}:
+    const twitterPost = `Just learned about ${internalSelectedContent.title.toLowerCase()}:
 
 🔹 70% faster code reviews
 🔹 45% less debugging time  
@@ -147,7 +160,7 @@ What's your experience with AI coding tools?
     setIsGenerating(false);
   };
 
-  const handlePlatformChange = (event: React.SyntheticEvent, newValue: SocialPlatform) => {
+  const handlePlatformChange = (_event: React.SyntheticEvent, newValue: SocialPlatform) => {
     setSelectedPlatform(newValue);
   };
 
@@ -168,6 +181,14 @@ What's your experience with AI coding tools?
   const handleSaveDraft = () => {
     onSaveDraft(selectedPlatform, postContent);
     onClose();
+  };
+
+  const handleContentSelect = (selected: ContentItem) => {
+    setInternalSelectedContent(selected);
+  };
+
+  const handleGoBackToSelection = () => {
+    setInternalSelectedContent(null);
   };
 
   const getCharacterLimit = (platform: SocialPlatform) => {
@@ -240,7 +261,9 @@ What's your experience with AI coding tools?
   const characterCount = postContent.length;
   const characterCountColor = getCharacterCountColor(characterCount, characterLimit);
 
-  if (!content) return null;
+  if (!open) {
+    return null;
+  }
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -249,11 +272,17 @@ What's your experience with AI coding tools?
           {/* Header */}
           <ModalHeader>
             <Stack direction="row" spacing={2} alignItems="center">
-              <IconButton onClick={onClose}>
-                <ArrowBackIosNewOutlinedIcon />
-              </IconButton>
+              {internalSelectedContent ? (
+                <IconButton onClick={handleGoBackToSelection}>
+                  <ArrowBackIosNewOutlinedIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={onClose}>
+                  <ArrowBackIosNewOutlinedIcon />
+                </IconButton>
+              )}
               <Typography variant="h6" className="text-white font-medium">
-                Create Social Post
+                {internalSelectedContent ? 'Create Social Post' : 'Select Content to Share'}
               </Typography>
             </Stack>
 
@@ -263,164 +292,183 @@ What's your experience with AI coding tools?
           </ModalHeader>
 
           {/* Content */}
-          <Box className="p-6">
-            {/* Platform Tabs */}
-            <Tabs
-              value={selectedPlatform}
-              onChange={handlePlatformChange}
-              className="mb-6"
-              sx={{
-                '& .MuiTabs-indicator': {
-                  backgroundColor: '#3b82f6',
-                },
-              }}
-            >
-              <PlatformTab
-                value={SocialPlatform.LINKEDIN}
-                icon={<LinkedInIcon />}
-                label="LinkedIn"
-                iconPosition="start"
-                sx={{ color: '#0077b5' }}
-              />
-              <PlatformTab
-                value={SocialPlatform.TWITTER}
-                icon={<TwitterIcon />}
-                label="X (Twitter)"
-                iconPosition="start"
-                sx={{ color: '#1da1f2' }}
-              />
-            </Tabs>
-
-            {/* Source Content Info */}
-            <PostPreviewCard sx={{ mb: 3 }}>
-              <Typography variant="subtitle2" className="text-blue-400 mb-2">
-                Generating post from:
-              </Typography>
-              <Typography variant="h6" className="text-white font-medium mb-1">
-                {content.title}
-              </Typography>
-              <Typography variant="body2" className="text-gray-300">
-                {content.description}
-              </Typography>
-            </PostPreviewCard>
-
-            {/* Post Content Editor */}
-            <Stack spacing={3}>
-              <Box>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" className="mb-2">
-                  <Typography variant="h6" className="text-white">
-                    Post Content
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<RefreshOutlinedIcon />}
-                    onClick={handleRegeneratePost}
-                    disabled={isGenerating}
-                  >
-                    {isGenerating ? 'Generating...' : 'Regenerate'}
-                  </Button>
-                </Stack>
-
-                <TextField
-                  multiline
-                  rows={8}
-                  fullWidth
-                  value={postContent}
-                  onChange={(e) => setPostContent(e.target.value)}
-                  placeholder={`Write your ${selectedPlatform} post...`}
-                  variant="outlined"
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: 'rgba(15, 23, 42, 0.5)',
-                    },
-                  }}
+          {internalSelectedContent ? (
+            <Box className="p-6">
+              {/* Platform Tabs */}
+              <Tabs
+                value={selectedPlatform}
+                onChange={handlePlatformChange}
+                className="mb-6"
+                sx={{
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: '#3b82f6',
+                  },
+                }}
+              >
+                <PlatformTab
+                  value={SocialPlatform.LINKEDIN}
+                  icon={<LinkedInIcon />}
+                  label="LinkedIn"
+                  iconPosition="start"
+                  sx={{ color: '#0077b5' }}
                 />
+                <PlatformTab
+                  value={SocialPlatform.TWITTER}
+                  icon={<TwitterIcon />}
+                  label="X (Twitter)"
+                  iconPosition="start"
+                  sx={{ color: '#1da1f2' }}
+                />
+              </Tabs>
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" className="mt-2">
-                  <CharacterCounter
-                    variant="caption"
-                    color={characterCountColor}
-                    theme={undefined}
-                  >
-                    {characterCount}/{characterLimit} characters
-                  </CharacterCounter>
-                  
-                  <Stack direction="row" spacing={1}>
-                    <Chip label="#AI" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
-                    <Chip label="#SoftwareEngineering" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
-                    <Chip label="#TechTrends" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
+              {/* Source Content Info */}
+              <PostPreviewCard sx={{ mb: 3 }}>
+                <Typography variant="subtitle2" className="text-blue-400 mb-2">
+                  Generating post from:
+                </Typography>
+                <Typography variant="h6" className="text-white font-medium mb-1">
+                  {internalSelectedContent.title}
+                </Typography>
+                <Typography variant="body2" className="text-gray-300">
+                  {internalSelectedContent.description}
+                </Typography>
+              </PostPreviewCard>
+
+              {/* Post Content Editor */}
+              <Stack spacing={3}>
+                <Box>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" className="mb-2">
+                    <Typography variant="h6" className="text-white">
+                      Post Content
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<RefreshOutlinedIcon />}
+                      onClick={handleRegeneratePost}
+                      disabled={isGenerating}
+                    >
+                      {isGenerating ? 'Generating...' : 'Regenerate'}
+                    </Button>
                   </Stack>
-                </Stack>
-              </Box>
 
-              {/* Platform Preview */}
-              <Box>
-                <Typography variant="h6" className="text-white mb-2">
-                  Preview
-                </Typography>
-                {renderPlatformPreview()}
-              </Box>
-
-              {/* Scheduling */}
-              <Box>
-                <Typography variant="h6" className="text-white mb-3">
-                  Schedule (Optional)
-                </Typography>
-                <FormControl size="small" sx={{ minWidth: 200 }}>
-                  <InputLabel>Schedule for later</InputLabel>
-                  <Select
-                    value={scheduledTime}
-                    onChange={(e) => setScheduledTime(e.target.value)}
-                    label="Schedule for later"
+                  <TextField
+                    multiline
+                    rows={8}
+                    fullWidth
+                    value={postContent}
+                    onChange={(e) => setPostContent(e.target.value)}
+                    placeholder={`Write your ${selectedPlatform} post...`}
+                    variant="outlined"
                     sx={{
-                      backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                      },
                     }}
-                  >
-                    <MenuItem value="">Post now</MenuItem>
-                    <MenuItem value="1hour">In 1 hour</MenuItem>
-                    <MenuItem value="tomorrow">Tomorrow 9 AM</MenuItem>
-                    <MenuItem value="optimal">Optimal time</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </Stack>
-          </Box>
+                  />
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" className="mt-2">
+                    <CharacterCounter
+                      variant="caption"
+                      color={characterCountColor}
+                      theme={undefined}
+                    >
+                      {characterCount}/{characterLimit} characters
+                    </CharacterCounter>
+                    
+                    <Stack direction="row" spacing={1}>
+                      <Chip label="#AI" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
+                      <Chip label="#SoftwareEngineering" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
+                      <Chip label="#TechTrends" size="small" variant="outlined" sx={{ color: '#60a5fa', borderColor: '#60a5fa' }} />
+                    </Stack>
+                  </Stack>
+                </Box>
+
+                {/* Platform Preview */}
+                <Box>
+                  <Typography variant="h6" className="text-white mb-2">
+                    Preview
+                  </Typography>
+                  {renderPlatformPreview()}
+                </Box>
+
+                {/* Scheduling */}
+                <Box>
+                  <Typography variant="h6" className="text-white mb-3">
+                    Schedule (Optional)
+                  </Typography>
+                  <FormControl size="small" sx={{ minWidth: 200 }}>
+                    <InputLabel>Schedule for later</InputLabel>
+                    <Select
+                      value={scheduledTime}
+                      onChange={(e) => setScheduledTime(e.target.value)}
+                      label="Schedule for later"
+                      sx={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                      }}
+                    >
+                      <MenuItem value="">Post now</MenuItem>
+                      <MenuItem value="1hour">In 1 hour</MenuItem>
+                      <MenuItem value="tomorrow">Tomorrow 9 AM</MenuItem>
+                      <MenuItem value="optimal">Optimal time</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Stack>
+            </Box>
+          ) : (
+            <Box className="p-6">
+              <List>
+                {availableContent.map((item) => (
+                  <ListItemButton key={item.id} onClick={() => handleContentSelect(item)} sx={{ mb: 1, borderRadius: 2 }}>
+                    <ListItemText 
+                      primary={item.title} 
+                      secondary={item.description}
+                      primaryTypographyProps={{ color: 'text.primary', fontWeight: 'medium' }}
+                      secondaryTypographyProps={{ color: 'text.secondary' }}
+                    />
+                  </ListItemButton>
+                ))}
+              </List>
+            </Box>
+          )}
 
           {/* Footer Actions */}
-          <Box className="p-6 border-t border-slate-700">
-            <Stack direction="row" spacing={2} justifyContent="space-between">
-              <Button
-                variant="outlined"
-                onClick={handleSaveDraft}
-              >
-                Save as Draft
-              </Button>
-              
-              <Stack direction="row" spacing={2}>
-                {scheduledTime && (
-                  <Button
-                    variant="outlined"
-                    startIcon={<ScheduleOutlinedIcon />}
-                    onClick={handleSchedulePost}
-                    disabled={characterCount > characterLimit}
-                  >
-                    Schedule Post
-                  </Button>
-                )}
-                
+          {internalSelectedContent && (
+            <Box className="p-6 border-t border-slate-700">
+              <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<SendOutlinedIcon />}
-                  onClick={handlePostNow}
-                  disabled={characterCount > characterLimit || !postContent.trim()}
+                  variant="outlined"
+                  onClick={handleSaveDraft}
                 >
-                  Post Now
+                  Save as Draft
                 </Button>
+                
+                <Stack direction="row" spacing={2}>
+                  {scheduledTime && (
+                    <Button
+                      variant="outlined"
+                      startIcon={<ScheduleOutlinedIcon />}
+                      onClick={handleSchedulePost}
+                      disabled={characterCount > characterLimit}
+                    >
+                      Schedule Post
+                    </Button>
+                  )}
+                  
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<SendOutlinedIcon />}
+                    onClick={handlePostNow}
+                    disabled={characterCount > characterLimit || !postContent.trim()}
+                  >
+                    Post Now
+                  </Button>
+                </Stack>
               </Stack>
-            </Stack>
-          </Box>
+            </Box>
+          )}
         </GlassmorphismCard>
       </ModalContainer>
     </Modal>

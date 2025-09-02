@@ -253,6 +253,7 @@ const App: React.FC = () => {
               userAvatar={user.profilePicture}
               userName={user.name}
               onLogout={handleLogout}
+              onNavigate={handleNavigate}
               isSidebarCollapsed={isSidebarCollapsed}
             />
           )}
@@ -311,6 +312,7 @@ const App: React.FC = () => {
           <SocialMediaGenerator
             open={socialMediaGeneratorOpen}
             content={selectedContent}
+            availableContent={todayContent}
             onClose={handleSocialMediaClose}
             onPost={handleSocialPost}
             onSaveDraft={handleSaveDraft}

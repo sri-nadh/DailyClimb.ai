@@ -44,6 +44,7 @@ interface TopBarProps {
   userAvatar: string;
   userName: string;
   onLogout: () => void;
+  onNavigate: (route: string) => void;
   isSidebarCollapsed: boolean;
 }
 
@@ -55,6 +56,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   userAvatar,
   userName,
   onLogout,
+  onNavigate,
   isSidebarCollapsed,
 }) => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
@@ -117,7 +119,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             sx={{ '& .MuiPaper-root': { backgroundColor: 'slate.800' } }}
           >
-            <MenuItem onClick={() => { handleUserMenuClose(); }}>
+            <MenuItem onClick={() => { onNavigate('/profile'); handleUserMenuClose(); }}>
               Profile Settings
             </MenuItem>
             <Divider />
