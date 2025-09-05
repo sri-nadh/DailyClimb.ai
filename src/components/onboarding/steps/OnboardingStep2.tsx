@@ -174,7 +174,7 @@ export const OnboardingStep2: React.FC<OnboardingStep2Props> = ({
                   {...getTagProps({ index })}
                   key={option}
                   sx={{
-                    borderColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgba(249, 250, 251, 0.5)', // light gray
                     color: '#60a5fa',
                   }}
                 />

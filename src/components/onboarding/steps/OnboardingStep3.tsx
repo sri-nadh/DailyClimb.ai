@@ -21,7 +21,7 @@ const PreferenceCard = styled(Card)(({ theme }) => ({
   cursor: 'pointer',
   transition: 'all 0.3s ease-in-out',
   backgroundColor: 'rgba(30, 41, 59, 0.5)',
-  border: '2px solid transparent',
+  border: '2px solid #f9fafb', // light gray
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 10px 25px rgba(59, 130, 246, 0.2)',
@@ -134,7 +134,7 @@ export const OnboardingStep3: React.FC<OnboardingStep3Props> = ({
                 onClick={() => handleInputChange('style', style.value)}
               >
                 <CardContent className="text-center p-4">
-                  <Box className="text-blue-400 mb-2">
+                  <Box className="text-gray-50 mb-2">
                     {style.icon}
                   </Box>
                   <Typography variant="h6" className="text-white font-medium mb-1">
@@ -207,15 +207,15 @@ export const OnboardingStep3: React.FC<OnboardingStep3Props> = ({
               ]}
               valueLabelDisplay="auto"
               sx={{
-                color: '#3b82f6',
+                color: '#f9fafb', // light gray
                 '& .MuiSlider-thumb': {
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: '#f9fafb', // light gray
                 },
                 '& .MuiSlider-track': {
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: '#f9fafb', // light gray
                 },
                 '& .MuiSlider-rail': {
-                  backgroundColor: 'rgba(148, 163, 184, 0.3)',
+                  backgroundColor: 'rgba(148, 163, 184, 0.3)', // keep as is, neutral gray
                 },
               }}
             />
@@ -235,7 +235,7 @@ export const OnboardingStep3: React.FC<OnboardingStep3Props> = ({
                 onClick={() => handleInputChange('dailyTime', time.value)}
               >
                 <CardContent className="text-center p-4">
-                  <Typography variant="h5" className="text-blue-400 font-bold mb-1">
+                  <Typography variant="h5" className="text-gray-50 font-bold mb-1">
                     {time.label}
                   </Typography>
                   <Typography variant="body2" className="text-gray-300">

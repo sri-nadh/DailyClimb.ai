@@ -118,7 +118,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       case NotificationCategory.ACHIEVEMENT:
         return '#10b981';
       default:
-        return '#6b7280';
+        return '#f9fafb'; // light gray
     }
   };
 
@@ -134,7 +134,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       {/* Header */}
       <DrawerHeader>
         <Stack direction="row" spacing={2} alignItems="center">
-          <NotificationsOutlinedIcon className="text-blue-400" />
+          <NotificationsOutlinedIcon className="text-gray-50" />
           <Typography variant="h6" className="text-white font-medium">
             Notifications
           </Typography>

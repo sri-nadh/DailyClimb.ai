@@ -176,7 +176,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                 sx={{
                   width: 80,
                   height: 80,
-                  backgroundColor: 'primary.main',
+                  backgroundColor: '#f9fafb', // light gray
                   color: 'white',
                   '&:hover': {
                     backgroundColor: 'primary.dark',
@@ -262,7 +262,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                   sx={{
                     height: 6,
                     borderRadius: 3,
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    backgroundColor: 'rgba(249, 250, 251, 0.2)', // light gray
                     '& .MuiLinearProgress-bar': {
                       backgroundColor: '#3b82f6',
                     },
@@ -312,7 +312,7 @@ export const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
                           </Typography>
                           <Rating value={source.credibilityScore} readOnly size="small" />
                         </Stack>
-                        <Link href={source.url} target="_blank" className="text-blue-400">
+                        <Link href={source.url} target="_blank" className="text-gray-50">
                           Read Original
                         </Link>
                       </Stack>

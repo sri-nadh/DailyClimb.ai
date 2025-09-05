@@ -17,8 +17,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 
 const SocialCard = styled(Card)(({ theme }) => ({
-  backgroundColor: 'rgba(30, 41, 59, 0.5)',
-  border: '1px solid rgba(51, 65, 85, 0.5)',
+  backgroundColor: 'rgba(249, 250, 251, 0.1)', // light gray
+  border: '1px solid rgba(249, 250, 251, 0.3)', // light gray
   cursor: 'pointer',
   transition: 'all 0.3s ease-in-out',
   '&:hover': {

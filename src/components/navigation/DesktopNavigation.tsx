@@ -25,10 +25,10 @@ import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  background: 'rgba(15, 23, 42, 0.95)', // slate-900 with opacity
+  background: 'rgba(249, 250, 251, 0.1)', // light gray
   backdropFilter: 'blur(16px)',
   WebkitBackdropFilter: 'blur(16px)',
-  borderBottom: '1px solid rgba(51, 65, 85, 0.5)',
+  borderBottom: '1px solid rgba(249, 250, 251, 0.5)', // light gray
 }));
 
 const NavButton = styled(IconButton)(({ theme }) => ({
@@ -40,7 +40,7 @@ const NavButton = styled(IconButton)(({ theme }) => ({
   },
   '&.active': {
     color: theme.palette.primary.main,
-    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+    backgroundColor: 'rgba(249, 250, 251, 0.2)', // light gray
   },
 }));
 
@@ -49,13 +49,13 @@ const SearchField = styled(TextField)(({ theme }) => ({
     backgroundColor: 'rgba(30, 41, 59, 0.8)',
     borderRadius: theme.shape.borderRadius,
     '& fieldset': {
-      border: '1px solid rgba(51, 65, 85, 0.5)',
+      border: '1px solid rgba(249, 250, 251, 0.5)', // light gray
     },
     '&:hover fieldset': {
       border: '1px solid rgba(59, 130, 246, 0.5)',
     },
     '&.Mui-focused fieldset': {
-      border: '1px solid rgba(59, 130, 246, 1)',
+      border: '1px solid rgba(249, 250, 251, 1)', // light gray
     },
   },
 }));
@@ -103,7 +103,7 @@ export const DesktopNavigation: React.FC<DesktopNavigationProps> = ({
     <StyledAppBar position="fixed" elevation={0}>
       <Toolbar className="px-6">
         {/* Logo */}
-        <Typography variant="h6" component="div" className="font-bold text-blue-400">
+        <Typography variant="h6" component="div" className="font-bold text-gray-50">
           DailyClimb
         </Typography>
 
@@ -180,7 +180,7 @@ export const DesktopNavigation: React.FC<DesktopNavigationProps> = ({
           {/* Notifications */}
           <IconButton
             onClick={onNotificationClick}
-            className="text-gray-300 hover:text-blue-400"
+            className="text-gray-300 hover:text-gray-50"
           >
             <Badge badgeContent={notificationCount} color="primary">
               <NotificationsOutlinedIcon />

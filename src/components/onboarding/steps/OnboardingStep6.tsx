@@ -208,7 +208,7 @@ export const OnboardingStep6: React.FC<OnboardingStep6Props> = ({
                   marks
                   valueLabelDisplay="on"
                   sx={{
-                    color: '#3b82f6',
+                    color: '#f9fafb', // light gray
                   }}
                 />
               </Box>
@@ -242,7 +242,7 @@ export const OnboardingStep6: React.FC<OnboardingStep6Props> = ({
                   {...getTagProps({ index })}
                   key={option}
                   sx={{
-                    borderColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgba(249, 250, 251, 0.5)', // light gray
                     color: '#60a5fa',
                   }}
                 />

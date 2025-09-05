@@ -28,7 +28,7 @@ const MorningCard = styled(TimeSlotCard)({
 });
 
 const AfternoonCard = styled(TimeSlotCard)({
-  borderLeft: '4px solid #3b82f6', // blue
+  borderLeft: '4px solid #f9fafb', // light gray
 });
 
 const EveningCard = styled(TimeSlotCard)({

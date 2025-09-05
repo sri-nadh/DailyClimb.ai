@@ -15,8 +15,8 @@ import { styled } from '@mui/material/styles';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 
 const NotificationPreview = styled(Card)(({ theme }) => ({
-  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-  border: '1px solid rgba(59, 130, 246, 0.3)',
+  backgroundColor: 'rgba(249, 250, 251, 0.1)', // light gray
+  border: '1px solid rgba(249, 250, 251, 0.3)', // light gray
   marginTop: theme.spacing(3),
 }));
 
@@ -46,7 +46,7 @@ export const OnboardingStep5: React.FC<OnboardingStep5Props> = ({
     } else {
       setFormData(prev => ({
         ...prev,
-        types: prev.types.filter(t => t !== type)
+        types: prev.types.filter((t: string) => t !== type)
       }));
     }
   };
@@ -158,7 +158,7 @@ export const OnboardingStep5: React.FC<OnboardingStep5Props> = ({
           <NotificationPreview>
             <CardContent>
               <Stack direction="row" spacing={2} alignItems="center">
-                <NotificationsOutlinedIcon className="text-blue-400" />
+                <NotificationsOutlinedIcon className="text-gray-50" />
                 <Box>
                   <Typography variant="subtitle1" className="text-white font-medium">
                     🌅 Your morning content is ready!
