@@ -78,7 +78,7 @@ src/
 ## Key Components
 
 ### Navigation
-- **TopBar**: A fixed top bar for search, notifications, and user preferences.
+- **TopBar**: A fixed top bar for audio/read toggle, notifications, and user preferences.
 - **LeftSidebar**: Collapsible sidebar for primary navigation links on desktop
 - **MobileNavigation**: Bottom tab navigation for mobile
 
